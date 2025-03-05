@@ -32,8 +32,28 @@ impl Lexer {
             '{' => Lexer::new_token(TokenKind::LeftBrace, self.ch),
             '}' => Lexer::new_token(TokenKind::RightBrace, self.ch),
             '+' => Lexer::new_token(TokenKind::Plus, self.ch),
-            '=' => Lexer::new_token(TokenKind::Assign, self.ch),
-            '!' => Lexer::new_token(TokenKind::Bang, self.ch),
+            '=' => {
+                if self.peek_char() == '=' {
+                    self.read_char();
+                    Token {
+                        kind: TokenKind::Eq,
+                        literal: String::from("==")
+                    }
+                } else {
+                    Lexer::new_token(TokenKind::Assign, self.ch)
+                }
+            }
+            '!' => {
+                if self.peek_char() == '=' {
+                    self.read_char();
+                    Token {
+                        kind: TokenKind::NotEq,
+                        literal: String::from("!=")
+                    }
+                } else {
+                    Lexer::new_token(TokenKind::Bang, self.ch)
+                }
+            },
             '-' => Lexer::new_token(TokenKind::Minus, self.ch),
             '/' => Lexer::new_token(TokenKind::Slash, self.ch),
             '*' => Lexer::new_token(TokenKind::Asterisk, self.ch),
@@ -103,6 +123,14 @@ impl Lexer {
             kind,
             literal: ch.to_string(),
         }
+    }
+
+    fn peek_char(&self) -> char {
+        return if self.read_pos >= self.input.len() {
+            '\0'
+        } else {
+            self.input[self.read_pos]
+        };
     }
 
     fn read_char(&mut self) {
@@ -507,6 +535,68 @@ let result = add(one, three);
             Token {
                 kind: TokenKind::RightBrace,
                 literal: "}".to_string(),
+            },
+        ];
+
+        let mut lexer = Lexer::new(input);
+
+        for (index, expected_token) in expected.into_iter().enumerate() {
+            let next_token = lexer.next();
+            assert_eq!(
+                expected_token.kind, next_token.kind,
+                "Index={index} incorrect token, Expected={}, Got={}",
+                expected_token.kind, next_token.kind
+            );
+
+            assert_eq!(
+                expected_token.literal, next_token.literal,
+                "Index={index} incorrect literal, Expected={}, Got={}",
+                expected_token.literal, next_token.literal
+            );
+        }
+    }
+
+    #[test]
+    fn test_eq_eq_and_not_eq() {
+        let input = r#"
+        1 == 1;
+        2 != 1;
+        "#;
+
+        let expected: Vec<Token> = vec![
+            // 1 == 1;
+            Token {
+                kind: TokenKind::Integer,
+                literal: "1".to_string(),
+            },
+            Token {
+                kind: TokenKind::Eq,
+                literal: "==".to_string(),
+            },
+            Token {
+                kind: TokenKind::Integer,
+                literal: "1".to_string(),
+            },
+            Token {
+                kind: TokenKind::Semicolon,
+                literal: ";".to_string(),
+            },
+            // 2 != 1;
+            Token {
+                kind: TokenKind::Integer,
+                literal: "2".to_string(),
+            },
+            Token {
+                kind: TokenKind::NotEq,
+                literal: "!=".to_string(),
+            },
+            Token {
+                kind: TokenKind::Integer,
+                literal: "1".to_string(),
+            },
+            Token {
+                kind: TokenKind::Semicolon,
+                literal: ";".to_string(),
             },
         ];
 
