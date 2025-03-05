@@ -13,6 +13,12 @@ pub enum TokenKind {
     Integer,
     Assign,
     Plus,
+    Minus,
+    Bang,
+    Asterisk,
+    Slash,
+    LessThan,
+    GreaterThan,
     Comma,
     Semicolon,
     LeftParen,
@@ -32,6 +38,12 @@ impl Display for TokenKind {
             TokenKind::Integer => write!(f, "Integer"),
             TokenKind::Assign => write!(f, "="),
             TokenKind::Plus => write!(f, "+"),
+            TokenKind::Minus => write!(f, "-"),
+            TokenKind::Bang => write!(f, "!"),
+            TokenKind::Asterisk => write!(f, "*"),
+            TokenKind::Slash => write!(f, "/"),
+            TokenKind::LessThan => write!(f, "<"),
+            TokenKind::GreaterThan => write!(f, ">"),
             TokenKind::Comma => write!(f, ","),
             TokenKind::Semicolon => write!(f, ";"),
             TokenKind::LeftParen => write!(f, "("),
@@ -49,6 +61,6 @@ pub fn lookup_identifier(identifier: &String) -> TokenKind {
     match identifier.as_str() {
         "fn" => TokenKind::Fn,
         "let" => TokenKind::Let,
-        _ => TokenKind::Identifier
+        _ => TokenKind::Identifier,
     }
 }
