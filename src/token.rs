@@ -40,7 +40,15 @@ impl Display for TokenKind {
             TokenKind::RightBrace => write!(f, "}}"),
             TokenKind::Fn => write!(f, "Fn"),
             TokenKind::Let => write!(f, "Let"),
-            TokenKind::Eof => write!(f, "EOF"),
+            TokenKind::Eof => write!(f, "Eof"),
         }
+    }
+}
+
+pub fn lookup_identifier(identifier: &String) -> TokenKind {
+    match identifier.as_str() {
+        "fn" => TokenKind::Fn,
+        "let" => TokenKind::Let,
+        _ => TokenKind::Identifier
     }
 }
