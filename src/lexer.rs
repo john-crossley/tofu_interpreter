@@ -427,4 +427,104 @@ let result = add(one, three);
             );
         }
     }
+
+    #[test]
+    fn test_if_else_statement() {
+        let input = r#"
+        if (4 > 2) {
+            return true;
+        } else {
+            return false;
+        }
+        "#;
+
+        let expected: Vec<Token> = vec![
+            // if (4 > 2) { return true; } else { return false; }
+            Token {
+                kind: TokenKind::If,
+                literal: "if".to_string(),
+            },
+            Token {
+                kind: TokenKind::LeftParen,
+                literal: "(".to_string(),
+            },
+            Token {
+                kind: TokenKind::Integer,
+                literal: "4".to_string(),
+            },
+            Token {
+                kind: TokenKind::GreaterThan,
+                literal: ">".to_string(),
+            },
+            Token {
+                kind: TokenKind::Integer,
+                literal: "2".to_string(),
+            },
+            Token {
+                kind: TokenKind::RightParen,
+                literal: ")".to_string(),
+            },
+            Token {
+                kind: TokenKind::LeftBrace,
+                literal: "{".to_string(),
+            },
+            Token {
+                kind: TokenKind::Return,
+                literal: "return".to_string(),
+            },
+            Token {
+                kind: TokenKind::True,
+                literal: "true".to_string(),
+            },
+            Token {
+                kind: TokenKind::Semicolon,
+                literal: ";".to_string(),
+            },
+            Token {
+                kind: TokenKind::RightBrace,
+                literal: "}".to_string(),
+            },
+            Token {
+                kind: TokenKind::Else,
+                literal: "else".to_string(),
+            },
+            Token {
+                kind: TokenKind::LeftBrace,
+                literal: "{".to_string(),
+            },
+            Token {
+                kind: TokenKind::Return,
+                literal: "return".to_string(),
+            },
+            Token {
+                kind: TokenKind::False,
+                literal: "false".to_string(),
+            },
+            Token {
+                kind: TokenKind::Semicolon,
+                literal: ";".to_string(),
+            },
+            Token {
+                kind: TokenKind::RightBrace,
+                literal: "}".to_string(),
+            },
+        ];
+
+        let mut lexer = Lexer::new(input);
+
+        for (index, expected_token) in expected.into_iter().enumerate() {
+            let next_token = lexer.next();
+            assert_eq!(
+                expected_token.kind, next_token.kind,
+                "Index={index} incorrect token, Expected={}, Got={}",
+                expected_token.kind, next_token.kind
+            );
+
+            assert_eq!(
+                expected_token.literal, next_token.literal,
+                "Index={index} incorrect literal, Expected={}, Got={}",
+                expected_token.literal, next_token.literal
+            );
+        }
+    }
 }
