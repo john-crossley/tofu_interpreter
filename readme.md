@@ -12,3 +12,11 @@ let add = fn(x, y) {
 
 let result = add(one, three);
 ```
+
+#### REPL
+
+To enter the REPL
+
+```console
+$ ./cargo run
+```
