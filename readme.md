@@ -3,6 +3,7 @@
 Learning how to write an interpreter in Rust.
 
 ```tofu
+// Well hello there!
 let one = 1;
 let three = 3;
 
