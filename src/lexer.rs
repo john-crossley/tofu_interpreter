@@ -37,7 +37,7 @@ impl Lexer {
                     self.read_char();
                     Token {
                         kind: TokenKind::Eq,
-                        literal: String::from("==")
+                        literal: String::from("=="),
                     }
                 } else {
                     Lexer::new_token(TokenKind::Assign, self.ch)
@@ -48,14 +48,21 @@ impl Lexer {
                     self.read_char();
                     Token {
                         kind: TokenKind::NotEq,
-                        literal: String::from("!=")
+                        literal: String::from("!="),
                     }
                 } else {
                     Lexer::new_token(TokenKind::Bang, self.ch)
                 }
-            },
+            }
             '-' => Lexer::new_token(TokenKind::Minus, self.ch),
-            '/' => Lexer::new_token(TokenKind::Slash, self.ch),
+            '/' => {
+                if self.peek_char() == '/' {
+                    self.skip_comment();
+                    return self.next();
+                } else {
+                    Lexer::new_token(TokenKind::Slash, self.ch)
+                }
+            }
             '*' => Lexer::new_token(TokenKind::Asterisk, self.ch),
             '<' => Lexer::new_token(TokenKind::LessThan, self.ch),
             '>' => Lexer::new_token(TokenKind::GreaterThan, self.ch),
@@ -84,6 +91,12 @@ impl Lexer {
 
     fn skip_whitespace(&mut self) {
         while self.ch.is_ascii_whitespace() {
+            self.read_char();
+        }
+    }
+
+    fn skip_comment(&mut self) {
+        while self.ch != '\n' {
             self.read_char();
         }
     }
@@ -147,9 +160,52 @@ impl Lexer {
 
 #[cfg(test)]
 mod test {
+    use super::Lexer;
     use crate::token::{Token, TokenKind};
 
-    use super::Lexer;
+    #[test]
+    fn test_comments_ignored() {
+        let input = r#"
+// Comments should be ignored!
+let is_logged_in = true;
+"#;
+
+        let expected: Vec<Token> = vec![
+            Token {
+                kind: TokenKind::Let,
+                literal: "let".to_string(),
+            },
+            Token {
+                kind: TokenKind::Identifier,
+                literal: "is_logged_in".to_string(),
+            },
+            Token {
+                kind: TokenKind::Assign,
+                literal: "=".to_string(),
+            },
+            Token {
+                kind: TokenKind::True,
+                literal: "true".to_string(),
+            },
+        ];
+
+        let mut lexer = Lexer::new(input);
+
+        for (index, expected_token) in expected.into_iter().enumerate() {
+            let next_token = lexer.next();
+            assert_eq!(
+                expected_token.kind, next_token.kind,
+                "Index={index} incorrect token, Expected={}, Got={}",
+                expected_token.kind, next_token.kind
+            );
+
+            assert_eq!(
+                expected_token.literal, next_token.literal,
+                "Index={index} incorrect literal, Expected={}, Got={}",
+                expected_token.literal, next_token.literal
+            );
+        }
+    }
 
     #[test]
     fn test_parse_basic_script() {
@@ -206,8 +262,8 @@ let result = add(one, three);
                 kind: TokenKind::Semicolon,
                 literal: ";".to_string(),
             },
-             // let add = fn(x, y) { x + y }
-             Token {
+            // let add = fn(x, y) { x + y }
+            Token {
                 kind: TokenKind::Let,
                 literal: "let".to_string(),
             },
@@ -243,7 +299,6 @@ let result = add(one, three);
                 kind: TokenKind::RightParen,
                 literal: ")".to_string(),
             },
-            
             Token {
                 kind: TokenKind::LeftBrace,
                 literal: "{".to_string(),
