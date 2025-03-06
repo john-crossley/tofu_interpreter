@@ -75,7 +75,7 @@ impl Lexer {
                     Token { kind, literal }
                 } else if Lexer::is_num(self.ch) {
                     let literal = self.read_num();
-                    let kind = TokenKind::Integer;
+                    let kind = TokenKind::Int;
 
                     Token { kind, literal }
                 } else {
@@ -234,7 +234,7 @@ let result = add(one, three);
                 literal: "=".to_string(),
             },
             Token {
-                kind: TokenKind::Integer,
+                kind: TokenKind::Int,
                 literal: "1".to_string(),
             },
             Token {
@@ -255,7 +255,7 @@ let result = add(one, three);
                 literal: "=".to_string(),
             },
             Token {
-                kind: TokenKind::Integer,
+                kind: TokenKind::Int,
                 literal: "3".to_string(),
             },
             Token {
@@ -459,7 +459,7 @@ let result = add(one, three);
                 literal: "*".to_string(),
             },
             Token {
-                kind: TokenKind::Integer,
+                kind: TokenKind::Int,
                 literal: "5".to_string(),
             },
             Token {
@@ -468,7 +468,7 @@ let result = add(one, three);
             },
             // 2 < 3 > 8;
             Token {
-                kind: TokenKind::Integer,
+                kind: TokenKind::Int,
                 literal: "2".to_string(),
             },
             Token {
@@ -476,7 +476,7 @@ let result = add(one, three);
                 literal: "<".to_string(),
             },
             Token {
-                kind: TokenKind::Integer,
+                kind: TokenKind::Int,
                 literal: "3".to_string(),
             },
             Token {
@@ -484,7 +484,7 @@ let result = add(one, three);
                 literal: ">".to_string(),
             },
             Token {
-                kind: TokenKind::Integer,
+                kind: TokenKind::Int,
                 literal: "8".to_string(),
             },
             Token {
@@ -532,7 +532,7 @@ let result = add(one, three);
                 literal: "(".to_string(),
             },
             Token {
-                kind: TokenKind::Integer,
+                kind: TokenKind::Int,
                 literal: "4".to_string(),
             },
             Token {
@@ -540,7 +540,7 @@ let result = add(one, three);
                 literal: ">".to_string(),
             },
             Token {
-                kind: TokenKind::Integer,
+                kind: TokenKind::Int,
                 literal: "2".to_string(),
             },
             Token {
@@ -621,7 +621,7 @@ let result = add(one, three);
         let expected: Vec<Token> = vec![
             // 1 == 1;
             Token {
-                kind: TokenKind::Integer,
+                kind: TokenKind::Int,
                 literal: "1".to_string(),
             },
             Token {
@@ -629,7 +629,7 @@ let result = add(one, three);
                 literal: "==".to_string(),
             },
             Token {
-                kind: TokenKind::Integer,
+                kind: TokenKind::Int,
                 literal: "1".to_string(),
             },
             Token {
@@ -638,7 +638,7 @@ let result = add(one, three);
             },
             // 2 != 1;
             Token {
-                kind: TokenKind::Integer,
+                kind: TokenKind::Int,
                 literal: "2".to_string(),
             },
             Token {
@@ -646,7 +646,7 @@ let result = add(one, three);
                 literal: "!=".to_string(),
             },
             Token {
-                kind: TokenKind::Integer,
+                kind: TokenKind::Int,
                 literal: "1".to_string(),
             },
             Token {

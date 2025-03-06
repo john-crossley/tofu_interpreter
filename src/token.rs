@@ -10,7 +10,7 @@ pub struct Token {
 pub enum TokenKind {
     Illegal,
     Identifier,
-    Integer,
+    Int,
     Assign,
     Eq,
     NotEq,
@@ -40,9 +40,9 @@ pub enum TokenKind {
 impl Display for TokenKind {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            TokenKind::Illegal => write!(f, "Illegal"),
-            TokenKind::Identifier => write!(f, "Identifier"),
-            TokenKind::Integer => write!(f, "Integer"),
+            TokenKind::Illegal => write!(f, "illegal"),
+            TokenKind::Identifier => write!(f, "identifier"),
+            TokenKind::Int => write!(f, "int"),
             TokenKind::Assign => write!(f, "="),
             TokenKind::Eq => write!(f, "=="),
             TokenKind::NotEq => write!(f, "!="),
@@ -64,8 +64,8 @@ impl Display for TokenKind {
             TokenKind::True => write!(f, "true"),
             TokenKind::False => write!(f, "false"),
             TokenKind::Return => write!(f, "return"),
-            TokenKind::Fn => write!(f, "Fn"),
-            TokenKind::Let => write!(f, "Let"),
+            TokenKind::Fn => write!(f, "fn"),
+            TokenKind::Let => write!(f, "let"),
             TokenKind::Eof => write!(f, "Eof"),
         }
     }
